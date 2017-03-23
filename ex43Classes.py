@@ -1,18 +1,20 @@
-from sys import exit
+from sys import exit  #Import required modules
 from random import randint
-class Scene(object):
 
-	def enter(self):
+
+class Scene(object): #Make a  base class Scene that has-a object to handle the scenes in the game
+
+	def enter(self): #Procedure that prints a message if called
 		print "This Scene is not yet configured. Subclass it and implement enter()."
 		exit(1)
 
 
-class Engine(object):
+class Engine(object): #Make a class Engine that has-a object to handle scene transitions
 
-	def __init__(self, sceneMap):
+	def __init__(self, sceneMap):#Procedure to initialize the maps for the scenes
 		self.sceneMap = sceneMap
 
-	def play(self):
+	def play(self):#Procedure to control the changing of scenes
 		currentScene = self.sceneMap.openingScene()
 		lastScene = self.sceneMap.nextScene('finished')
 
@@ -21,22 +23,22 @@ class Engine(object):
 			currentScene = self.sceneMap.nextScene(nextSceneName)
 		currentScene.enter()
 
-class Death(Scene):
+class Death(Scene):#Make a class Death that is-a scene
 
-	quips = [
+	quips = [ #Make a list with messages to display when the death scene is called
 		"You died. you kinda suck at this.",
 		"Your mom would be proud... if she were smarter.",
 		"such a loser",
 		"I have a small puppy that's better at this."
 	]
 	
-	def enter(self):
+	def enter(self): #procedure that chooses a random death message
 		print Death.quips[randint(0, len(self.quips)-1)]
 		exit(1)
 
-class CentralCorridor(Scene):
+class CentralCorridor(Scene):#create class CentralCorridor that is-a scene
 	
-	def enter(self):
+	def enter(self): #procedure that runs when the corridor class is called and displays the information 
 		print "The Gothons of Planet Percal #25 have invaded your ship and destroyed"
 		print "your entire crew. You are the last surviving member and your last"
 
@@ -56,9 +58,9 @@ class CentralCorridor(Scene):
 
 		print "Armory and about to pull a weapon to blast you."
 		
-		action = raw_input("> ")
+		action = raw_input("> ")#get user input to chose and action
 
-		if action == "shoot!":
+		if action == "shoot!": #check what the user inputed and decide what to display
 
 			print "Quick on the draw you yank out your blaster and fire it at the Gothon."
 
@@ -74,7 +76,7 @@ class CentralCorridor(Scene):
 
 			return 'death'
 
-		elif action == "dodge!":
+		elif action == "dodge!": #check what the user inputed and decide what to display
 			print "Like a world class boxer you dodge, weave, slip and slide right"
 
 			print "as the Gothon's blaster cranks a laser past your head."
@@ -89,7 +91,7 @@ class CentralCorridor(Scene):
 
 			return 'death'
 		
-		elif action == "tell a joke":
+		elif action == "tell a joke": #check what the user inputed and decide what to display and what scene to call next
 			print "Lucky for you they made you learn Gothon insults in the academy."
 
 			print "You tell the one Gothon joke you know:"
@@ -104,13 +106,13 @@ class CentralCorridor(Scene):
 
 			return 'laser_weapon_armory'
 		
-		else:
+		else: #Return the same scene if tha action is not recognized
 			print "DOES NOT COMPUTE!"
 			return 'central_corridor'
 			
-class LaserWeaponArmory(Scene):
+class LaserWeaponArmory(Scene):#Make a class LaserWeaponArmory that is-a scene
 
-	def enter(self):
+	def enter(self): #procedure that runs when the LaserWeaponArmory class is called and displays the information 
 		print "You do a dive roll into the Weapon Armory, crouch and scan the room"
 
 		print "for more Gothons that might be hiding. It's dead quiet, too quiet."
@@ -124,11 +126,11 @@ class LaserWeaponArmory(Scene):
 		print "wrong 10 times then the lock closes forever and you can't"
 
 		print "get the bomb. The code is 3 digits."
-		code = "%d%d%d" % (randint(1, 9), randint(1,9), randint(1,9))
-		guess = raw_input("[keypad]>")
+		code = "%d%d%d" % (randint(1, 9), randint(1,9), randint(1,9))#randomly generate the code for the door
+		guess = raw_input("[keypad]>")#get user input for the guess of the code
 		guesses = 0
 
-		while guess != code and guess < 10:
+		while guess != code and guess < 10:#give the player certain number of guesses
 			print "BZZZZEDDD"
 			guesses += 1
 			guess = raw_input("[keypad]>")
@@ -155,9 +157,9 @@ class LaserWeaponArmory(Scene):
 
 			return 'death'
 			
-class TheBridge(Scene):
+class TheBridge(Scene):#Make a class TheBridge that is-a scene
 
-	def enter(self):
+	def enter(self): #procedure that runs when the TheBridge class is called and displays the information 
 		print "You burst onto the Bridge with the netron destruct bomb"
 
 		print "under your arm and surprise 5 Gothons who are trying to"
@@ -170,9 +172,9 @@ class TheBridge(Scene):
 
 		print "arm and don't want to set it off."
 
-		action = raw_input("> ")
+		action = raw_input("> ")#get user input for the action
 
-		if action == "throw the bomb":
+		if action == "throw the bomb":#check what the user inputed and decide what to display and what scene to call next
 			print "In a panic you throw the bomb at the group of Gothons"
 
 			print "and make a leap for the door. Right as you drop it a"
@@ -214,7 +216,7 @@ class TheBridge(Scene):
 			return 'the_bridge'
 			
 
-class EscapePod(Scene):
+class EscapePod(Scene):#Make a class Escape that is-a scene
 
 	def enter(self):
 		print "You rush through the ship desperately trying to make it to"
@@ -262,13 +264,13 @@ class EscapePod(Scene):
 
 			return 'finished'
 					
-class Finished(Scene):
+class Finished(Scene):#Make a class Finished that is-a scene
 	
-	def enter(self):
+	def enter(self):#Procedure that output the winning message
 		print "You won! Good job."
 		return 'finished'
 
-class Map(object):
+class Map(object):#Make a class Map that has-a Map
 	
 	scenes = {
 		'central_corridor': CentralCorridor(),
@@ -277,16 +279,16 @@ class Map(object):
 		'escape_pod' : EscapePod(),
 		'death': Death(),
 		'finished': Finished(),
-		}
+		}#Make an index of what each string means and what Class they call
 		
-	def __init__(self, startScene):
+	def __init__(self, startScene):#Make a initialization procedure that starts the scenes
 		self.startScene = startScene
 
-	def nextScene(self, sceneName):
+	def nextScene(self, sceneName):#Make a procedure that that changes what the next scene is
 		val = Map.scenes.get(sceneName)
 		return val
 
-	def openingScene(self):
+	def openingScene(self):#Make a procedure that brings up the opening scene then does the startscene procedure
 		return self.nextScene(self.startScene)
 
 
