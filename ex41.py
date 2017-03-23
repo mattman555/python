@@ -3,9 +3,9 @@ from urllib import urlopen
 import sys
 
 word_url = "http://learncodethehardway.org/words.txt"
-words = []
+words = [] #make a empty list to hold the words taken from the website
 
-phrases = {
+phrases = {#make a index of things to check and determine the answers
 	"class %%%(%%%):":
 	  "Make a class named %%% that is-a %%%.",
 	"class %%%(object):\n\tdef __init__(self, ***)" :
@@ -30,17 +30,17 @@ else:
 for word in urlopen(word_url).readlines():
 	words.append(word.strip())
 	
-def convert(snippet, phrase):
-	class_names = [w.capitalize() for w in
+def convert(snippet, phrase):#procedure that chooses the names of the classes, objects and parameters
+ 	class_names = [w.capitalize() for w in
 		random.sample(words, snippet.count("%%%"))]
 	other_names = random.sample(words, snippet.count("***"))
-	results = []
-	param_names = []
+	results = []#list to hold the results
+	param_names = []#list to hold the parameter names
 	
-	for i in range(0, snippet.count("@@@")):
+	for i in range(0, snippet.count("@@@")):#add a random number of parameters to the param_names list
 		param_count = random.randint(1,3)
 		param_names.append(', '.join(random.sample(words, param_count)))
-	for sentence in snippet, phrase:
+	for sentence in snippet, phrase:#make the snippets
 		result = sentence[:]
 		
 		#fake class names
@@ -59,7 +59,7 @@ def convert(snippet, phrase):
 	
 	
 try:
-	while True:
+	while True:#randomly chooses and print a question then the answer 
 		snippets = phrases.keys()
 		random.shuffle(snippets)
 		
